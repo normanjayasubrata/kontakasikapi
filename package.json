@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "configure": "sequelize db:drop && sequelize db:create && sequelize db:migrate && rm -rf uploads/"
+    "configure": "sequelize db:drop && sequelize db:create && sequelize db:migrate && rm -rf uploads/",
+    "gcloud-login": "npx google-artifactregistry-auth"
   },
   "dependencies": {
     "@google-cloud/storage": "^6.11.0",

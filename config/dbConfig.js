@@ -5,7 +5,7 @@ module.exports = {
     "password":process.env.DATABASE_PASSWORD,
     "database": process.env.DATABASE_DB,
     "host": process.env.DATABASE_HOST,
-    "dialect": "postgres"
+    "dialect": "postgres",
   },
   // "test": {
   //   "username": "root",
@@ -14,11 +14,8 @@ module.exports = {
   //   "host": "127.0.0.1",
   //   "dialect": "mysql"
   // },
-  // "production": {
-  //   "username": "root",
-  //   "password": null,
-  //   "database": "database_production",
-  //   "host": "127.0.0.1",
-  //   "dialect": "mysql"
-  // }
+  "production": {
+    socketPath: process.env.DATABASE_SOCKET_PATH,
+    "dialect": "postgres"
+  }
 }

@@ -2,12 +2,13 @@ const path = require('path');
 const { Storage } = require('@google-cloud/storage');
 
 //credentials initialization
-const gCStorageCredentials = path.join(__dirname, '..', 'credentials', 'kontakasik-ec701caeec92.json')
+// const gCStorageCredentials = path.join(__dirname, '..', 'credentials', 'kontakasik-ec701caeec92.json')
 
 //storage and bucket initialization
 const storage = new Storage({
     projectId: process.env.GC_STORAGE_PROJECT_ID,
-    keyFilename: gCStorageCredentials,
+    // keyFilename: gCStorageCredentials,
+    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 });
 const bucketName = process.env.GC_STORAGE_BUCKET_NAME;
 const imageFolderName = 'images'
