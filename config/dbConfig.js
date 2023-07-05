@@ -15,7 +15,10 @@ module.exports = {
     "dialect": "postgres",
   },
   "production": {
-    socketPath: process.env.DATABASE_SOCKET_PATH,
+    "username": process.env.ELEPHANT_SQL_DB,
+    "password": process.env.ELEPHANT_SQL_PASSWORD,
+    "database": process.env.ELEPHANT_SQL_DB,
+    "host": process.env.ELEPHANT_SQL_HOST,
     "dialect": "postgres"
   }
 }
