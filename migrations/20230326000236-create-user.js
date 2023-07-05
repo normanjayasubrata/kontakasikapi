@@ -58,11 +58,17 @@ module.exports = {
       address: {
         type: Sequelize.TEXT
       },
+      image_id: {
+        type: Sequelize.STRING
+      },
       image_name: {
         type: Sequelize.STRING
       },
       image_original_name: {
         type: Sequelize.STRING
+      },
+      image_cdn_url: {
+        type: Sequelize.STRING,
       },
       created_date: {
         allowNull: false,

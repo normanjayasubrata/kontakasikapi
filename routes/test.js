@@ -1,25 +1,11 @@
 const express = require('express');
-const {check} = require('express-validator');
 const router = express.Router();
-const {testPost, testPut, testGet} = require('../controllers/test');
-const {multipartMiddleware} = require('../utils/uploadGCHandlerUtil')
-const {multerCloudImageUploadMiddleWare, multerDiskImageUploadMiddleWare, multerCloudImagesUploadMiddleWare} = require('../utils/uploadHandlerUtil')
-const {tokenValidator} = require('../utils/tokenUtil')
+const {testGet, testDB, testStorage} = require('../controllers/test');
+const {multerCloudImageUploadMiddleWare}= require('../utils/uploadHandlerUtil')
 
 router.get('/', testGet)
+router.get('/database', testDB)
+router.get('/storage',multerCloudImageUploadMiddleWare, testStorage)
 
-router.post('/',
-
-    // multipartMiddleware,
-    multerCloudImagesUploadMiddleWare,
-    // check('name', 'name field cannot be empty').trim().not().isEmpty(),
-    testPost
-)
-
-router.put('/',
-    tokenValidator,
-    // GCSImageUploadMiddleware,
-    testPut
-)
 
 module.exports = router;

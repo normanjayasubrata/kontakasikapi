@@ -8,7 +8,6 @@ const {phoneDecryptor, phoneEncryptor} = require("../utils/cryptoUtil");
 const gender = require("../enum/gender");
 const {getPhoneNumber} = require("../utils/phoneNumberUtil");
 const {stringCapitalize} = require("../utils/stringFormatter");
-const {getImageUrlFromGCS} = require("../utils/uploadGCHandlerUtil")
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         /**
@@ -61,16 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         village: DataTypes.STRING,
         postalCode: DataTypes.INTEGER,
         address: DataTypes.TEXT,
+        imageId: DataTypes.STRING,
         imageName: DataTypes.STRING,
         imageOriginalName: DataTypes.STRING,
-        imageUrl: {
-            type: DataTypes.VIRTUAL,
-            get() {
-                if (this.imageName) {
-                    return getImageUrlFromGCS(this.imageName)
-                }
-            }
-        }
+        imageCdnUrl: DataTypes.STRING
     }, {
         hooks: {
             beforeValidate(user, options) {
@@ -124,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         scopes: {
             authenticationScope: {
-                attributes:  ['id', 'userId', 'phone', 'email', 'password', 'firstName', 'imageName', 'imageUrl']
+                attributes:  ['id', 'userId', 'phone', 'email', 'password', 'firstName', 'imageName', 'imageCdnUrl']
             }
         },
         sequelize,

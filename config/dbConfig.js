@@ -7,13 +7,13 @@ module.exports = {
     "host": process.env.DATABASE_HOST,
     "dialect": "postgres",
   },
-  // "test": {
-  //   "username": "root",
-  //   "password": null,
-  //   "database": "database_test",
-  //   "host": "127.0.0.1",
-  //   "dialect": "mysql"
-  // },
+  "test": {
+    "username": process.env.ELEPHANT_SQL_DB,
+    "password": process.env.ELEPHANT_SQL_PASSWORD,
+    "database": process.env.ELEPHANT_SQL_DB,
+    "host": process.env.ELEPHANT_SQL_HOST,
+    "dialect": "postgres",
+  },
   "production": {
     socketPath: process.env.DATABASE_SOCKET_PATH,
     "dialect": "postgres"

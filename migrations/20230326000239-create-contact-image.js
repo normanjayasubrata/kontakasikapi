@@ -32,6 +32,9 @@ module.exports = {
           key: 'contact_id'
         }
       },
+      cdn_url: {
+        type: Sequelize.STRING,
+      },
       created_date: {
         allowNull: false,
         type: 'TIMESTAMP',

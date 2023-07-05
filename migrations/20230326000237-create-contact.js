@@ -61,9 +61,6 @@ module.exports = {
           key: 'user_id',
         }
       },
-      image_name: {
-        type: Sequelize.STRING
-      },
       created_date: {
         allowNull: false,
         type: 'TIMESTAMP',

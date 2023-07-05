@@ -1,24 +1,31 @@
 const {success, failed} = require('../utils/responseBean');
-const {User, UserActivityLog} = require('../models');
+const {User, UserActivityLog, ContactImage} = require('../models');
 const LogActivity = require('../enum/logActivity')
 const {validationResult} = require('express-validator');
-const {getPhoneCountryCode, getPhoneNumber} = require('../utils/phoneNumberUtil');
+const {getPhoneNumber} = require('../utils/phoneNumberUtil');
 const {tokenGenerator} = require('../utils/tokenUtil');
-const {propertySelector, emptyPropertyRemover} = require('../utils/objectFormatter');
-const { deleteImagesFromGCS, uploadImagesToGCS} = require("../utils/uploadGCHandlerUtil")
+const {emptyPropertyRemover} = require('../utils/objectFormatter');
+const {uploadImageToUCareCDN, deleteImageFromUCareCDN} = require('../utils/uploadCareHandlerUtil')
 
 
 const register = async (req, res, next) => {
     try {
         validationResult(req).throw();
-        // create image name
-        const imageFileOriginalName = req.file ? req.file.originalname : null;
-        const imageFileName = req.file ? `UI${Date.now()}-${req.file.originalname}` : null;
         //save new user to database
-        const newUser = await User.create(emptyPropertyRemover({...req.body, imageName: imageFileName, imageOriginalName: imageFileOriginalName}));
-        //if there's image file, upload it to google storage
+        const newUser = await User.create(emptyPropertyRemover(req.body));
         if (req.file) {
-            await uploadImagesToGCS(req.file, imageFileName)
+            const uploadResult = await uploadImageToUCareCDN(req.file)
+            if (uploadResult.isStored) {
+                const dataUpdate = {
+                    imageId: uploadResult.uuid,
+                    imageName: uploadResult.name,
+                    imageOriginalName: uploadResult.originalFilename,
+                    imageCdnUrl: uploadResult.cdnUrl
+                }
+                await User.update(dataUpdate, {where: {userId: newUser.userId}})
+            } else {
+                console.error(`failed uploading image for new user ${newUser.userId} : ${uploadResult}`)
+            }
         }
         //save the log
         await UserActivityLog.create({userId: newUser.userId, action: LogActivity.register, newData: newUser.dataValues})
@@ -155,17 +162,23 @@ const updateUserPhone = async (req, res, next) => {
 
 const updateUserImage = async (req, res, next) => {
     try {
-        const currentImageName = (await User.findOne({where: {userId: req.user}})).getDataValue("imageName")
+        const currentUserUpdate = await User.findOne({where: {userId: req.user}})
+        const currentImageId = currentUserUpdate.imageId
+        const currentImageName = currentUserUpdate.imageOriginalName
         if (req.file) {
-            if (currentImageName) {
-               await deleteImagesFromGCS(currentImageName)
+            const deleteResult = currentImageId ? await deleteImageFromUCareCDN(currentImageId) : null;
+            const uploadResult = await uploadImageToUCareCDN(req.file)
+            const dataUpdate = {
+                imageId: uploadResult.uuid,
+                imageName: uploadResult.name,
+                imageOriginalName: uploadResult.originalFilename,
+                imageCdnUrl: uploadResult.cdnUrl
             }
-            await uploadImagesToGCS(req.file)
-            const deletedStatus = currentImageName ? `, and File ${currentImageName} deleted in GCS` : ""
-            await User.update({imageName: req.file.filename}, {where: {userId: req.user}})
+            await User.update(dataUpdate, {where: {userId: req.user}})
+            const deletedStatus = deleteResult ? `, and File ${currentImageName} deleted in CDN` : ""
             console.log(`File ${req.file.filename} uploaded${deletedStatus}`);
             const updatedUser = await User.findOne({where: {userId: req.user}})
-            await UserActivityLog.create({userId: updatedUser.userId, action: LogActivity.updateUserImage, oldData: {imageName: currentImageName}, newData: {imageName: updatedUser.imageName}})
+            await UserActivityLog.create({userId: updatedUser.userId, action: LogActivity.updateUserImage, oldData: currentImageId ? {imageName: currentImageName} : null, newData: {imageName: updatedUser.imageName}})
             return res.json(success(updatedUser, "upload success"));
         } else {
             return res.json(success({}, "no file uploaded"));

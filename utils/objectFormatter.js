@@ -15,8 +15,6 @@ const propertySelector = (model, template) => {
 
 const emptyPropertyRemover = inputObject => {
     const arrayObject = Object.entries(inputObject);
-    console.log("norman inputObject", inputObject);
-    console.log("norman arrayObject", arrayObject);
     const returnedObject = arrayObject.filter(property => property[1] && property[1].trim() !== '')
     return Object.fromEntries(returnedObject)
 }

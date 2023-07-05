@@ -4,7 +4,6 @@ const router = express.Router();
 const {createContact, readContacts, readContact, updateContact, deleteContact, readContactImages, createContactImage, updateContactImages, deleteContactImage} = require('../controllers/contacts');
 const {getPhoneNumber, phoneLength} = require('../utils/phoneNumberUtil')
 const {tokenValidator} = require('../utils/tokenUtil')
-const {profilePictureUpload} = require('../controllers/imageController')
 const {multerCloudImagesUploadMiddleWare, multerCloudImageUploadMiddleWare} = require('../utils/uploadHandlerUtil')
 
 

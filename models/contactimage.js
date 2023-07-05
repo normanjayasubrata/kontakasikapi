@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const {getImageUrlFromGCS} = require("../utils/uploadGCHandlerUtil");
 module.exports = (sequelize, DataTypes) => {
   class ContactImage extends Model {
     /**
@@ -30,14 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'contactId'
       }
     },
-    imageUrl: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        if (this.imageName) {
-          return getImageUrlFromGCS(this.imageName)
-        }
-      }
-    }
+    cdnUrl: DataTypes.STRING
   }, {
     defaultScope: {
       attributes: {exclude: ['id', 'created_date', 'updated_date']}
