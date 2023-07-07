@@ -9,7 +9,7 @@ const tokenGenerator = (userId, email) => {
         email
     };
     console.log("payload generated", payload);
-    const token = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '1h'});
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '1d'});
     return {token};
 };
 
