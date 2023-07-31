@@ -21,7 +21,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-const io = require('../utils/socketIOUtil').init(server)
+const io = require('../src/utils/socketIOUtil').init(server)
 app.set('io', io);
 /**
  * Listen on provided port, on all network interfaces.

@@ -37,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
     scopes: {
       allContactImageScope: {
         attributes: {}
+      },
+      simplifiedContactImageScope: {
+        attributes: {exclude: ['id', 'imageId', 'isDefaultImage', 'contactId', 'created_date', 'updated_date']}
       }
     },
     sequelize,
