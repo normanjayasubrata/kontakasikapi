@@ -15,7 +15,6 @@ const testUploadcareConnection = async () => {
 
         // Test the connection by uploading a dummy file
         const uploadResult = await uploadImageToUCareCDN(dummyFile);
-        console.log("norman", uploadResult);
         return Promise.resolve('Uploadcare API connection successful. Upload Result:', uploadResult);
         // You can perform additional operations with the API here
 
@@ -74,7 +73,7 @@ const deleteImageFromUCareCDN = async (uuid) => {
             {uuid},
             { authSchema: uploadcareSimpleAuthSchema }
         );
-        result && console.log(`Image ${uuid} deleted successfully`)
+        result && console.log(`Image ${uuid} deleted successfully from CDN`)
         return Promise.resolve(result)
     } catch (err) {
         console.error(`Failed when deleting ${uuid} image`)

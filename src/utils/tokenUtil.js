@@ -8,9 +8,8 @@ const tokenGenerator = (userId, email) => {
         userId,
         email
     };
-    console.log("payload generated", payload);
     const token = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '1d'});
-    return {token};
+    return token;
 };
 
 const tokenValidator = (req, res, next) => {

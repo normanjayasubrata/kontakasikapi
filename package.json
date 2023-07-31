@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "configure": "sequelize db:drop && sequelize db:create && sequelize db:migrate && rm -rf uploads/",
-    "gcloud-login": "node ./bin/gcloudloginexec"
+    "gcloud-login": "node ./bin/gcloudloginexec",
+    "coba": "node ./scheduler/coba.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^6.11.0",
@@ -38,6 +39,7 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
+    "proxyquire": "^2.1.3",
     "sequelize-cli": "^6.6.0",
     "sinon": "^15.1.2"
   }

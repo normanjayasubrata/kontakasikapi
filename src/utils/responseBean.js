@@ -1,6 +1,7 @@
 const success = (params, msg) => {
     return {
         success: true,
+        code: 200,
         message: msg,
         data: params
     };

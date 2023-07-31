@@ -4,12 +4,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const passport = require('./config/passport');
+const passport = require('./src/config/passport');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const contactsRouter = require('./routes/contacts');
-const testRouter = require('./routes/test');
+const indexRouter = require('./src/routes/index');
+const usersRouter = require('./src/routes/users');
+const contactsRouter = require('./src/routes/contacts');
+const testRouter = require('./src/routes/test');
 
 const app = express();
 
@@ -40,6 +40,7 @@ app.use(function(err, req, res, next) {
     // set error JSON object
     const errorJson = {};
     errorJson.success = false;
+    errorJson.code = res.statusCode;
     errorJson.message = err.message;
     errorJson.data = err.data;
     req.app.get('env') === 'development' && (errorJson.error = err);
